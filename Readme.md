@@ -57,7 +57,9 @@ pip install tensorflow==1.15.4
 
 #### data
 ```data
-done_data.csv && test_done_data.csv
+done_data.csv && NASDAQ_done_data.csv
+The first one is dow_30 and the second one is NASDAQ 100.
+NASDAQ 100 are filtered out from 100 stocks to 81 stocks.
 ```
 #### env
 ```env
