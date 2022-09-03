@@ -283,21 +283,11 @@ def process_the_value_data(unique_trade_date):
 
 # 主函数
 def run_Lstm_strategy(df, unique_trade_date, rebalance_window, validation_window) -> None:
-    """Ensemble Strategy that combines PPO, A2C and DDPG"""
-    print("============Start Ensemble Strategy============")
+    print("============Start TD3_LSTM Strategy============")
     # for ensemble model, it's necessary to feed the last state
     # of the previous model to the current model as the initial state
     last_state_ensemble = []
-
-    ppo_sharpe_list = []
-    ddpg_sharpe_list = []
-    a2c_sharpe_list = []
-    student_sharpe_list = []
-
-    model_use = []
-
-    data_last_parsec = None
-    time_to_train_student = 127
+    sharpe_list = []
 
     # based on the analysis of the in-sample data
     #turbulence_threshold = 140
@@ -364,7 +354,7 @@ def run_Lstm_strategy(df, unique_trade_date, rebalance_window, validation_window
         DRL_validation(model=model_td3, test_data=validation, test_env=env_val, test_obs=obs_val)
         sharpe_student = get_validation_sharpe(i)
         print("Student Model Sharpe Ratio: ", sharpe_student)
-        student_sharpe_list.append(sharpe_student)
+        sharpe_list.append(sharpe_student)
 
 
         ############## Trading starts ##############
@@ -382,7 +372,7 @@ def run_Lstm_strategy(df, unique_trade_date, rebalance_window, validation_window
 
     end = time.time()
     print("Ensemble Strategy took: ", (end - start) / 60, " minutes")
-    print("Student sharpe:", student_sharpe_list)
+    print("Sharpe list: ", sharpe_list)
 
     print("====== Data Processing ======")
 

@@ -179,7 +179,7 @@ class StockEnvTrade(gym.Env):
             # print(np.array(self.state[1:29]))
 
             actions = actions * HMAX_NORMALIZE
-            actions = np.round(actions, 2)
+            # actions = np.round(actions, 2)
             # actions = (actions.astype(int))
             if self.turbulence >= self.turbulence_threshold:
                 actions = np.array([-HMAX_NORMALIZE] * STOCK_DIM)
