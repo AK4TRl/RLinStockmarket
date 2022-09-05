@@ -80,10 +80,15 @@ A tool that uses for processing the data
 ```stock_detail
 That is a folder saves all the operations the AI did in stockmarket.
 ```
-#### TD3_LSTM_DRL.py 
+#### TD3_LSTM_DRL.py && models.py in model
 ```main project
 This is the main body of our project.
 In this part, we could find 3 phases, the model training phase, validating phase and trading phase.
+
+1. If we want to train model use NASDAQ_100 in TD3_LSTM_DRL.py, we have to change the number 30 in line 314 to 81.
+2. If we want to train model use NASDAQ_100 in models.py, we have to change the number 30 in line 193 to 81.
+Conversely, we have to change the number 81 to 30 for using dow_30 data.
+It both about the start_date_index.
 ```
 
 ## Run DRL Ensemble Strategy
