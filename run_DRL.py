@@ -1,7 +1,8 @@
 # 2 preprocessors
 # 第一个数据处理文件作为标准，面向琼斯指数
 # 第二个数据处理文件在第一个的基础上进行了小扩建，面向纳斯达克
-from preprocessing.preprocessors import *
+#from preprocessing.preprocessors import *
+from preprocessing.implementTool import *
 # config
 # 2 models
 # 第一个是多模型训练策略（标程）
@@ -15,7 +16,7 @@ def run_model() -> None:
     """Train the model."""
 
     # read and preprocess data
-    preprocessed_path = "data/NASDAQ_done_data.csv"
+    preprocessed_path = "./data/NASDAQ_done_data.csv"
     if os.path.exists(preprocessed_path):
         data = pd.read_csv(preprocessed_path, index_col=0)
     else:
@@ -40,11 +41,12 @@ def run_model() -> None:
 
     ## Ensemble Strategy
     # run_ensemble_strategy(df=data, unique_trade_date=unique_trade_date, rebalance_window=rebalance_window, validation_window=validation_window)
+    ## Ours Strategy
+    run_Lstm_strategy(df=data, unique_trade_date=unique_trade_date, rebalance_window=rebalance_window, validation_window=validation_window)
 
     # _logger.info(f"saving model version: {_version}")
     # test_run_ensemble_strategy(df=data, unique_trade_date=unique_trade_date, rebalance_window=rebalance_window, validation_window=validation_window)
     # run_td3_strategy(df=data, unique_trade_date=unique_trade_date, rebalance_window=rebalance_window, validation_window=validation_window)
-    run_Lstm_strategy(df=data, unique_trade_date=unique_trade_date, rebalance_window=rebalance_window, validation_window=validation_window)
 
 
 if __name__ == "__main__":

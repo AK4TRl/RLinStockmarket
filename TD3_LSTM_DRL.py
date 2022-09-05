@@ -311,7 +311,7 @@ def run_Lstm_strategy(df, unique_trade_date, rebalance_window, validation_window
         # Turbulence lookback window is one quarter
         # TODO:chang subset from datadate to date
         end_date_index = df.index[df["date"] == unique_trade_date[i - rebalance_window - validation_window]].to_list()[-1]
-        start_date_index = end_date_index - validation_window*30 + 1
+        start_date_index = end_date_index - validation_window*81 + 1
 
         historical_turbulence = df.iloc[start_date_index:(end_date_index + 1), :]
         #historical_turbulence = df[(df.datadate<unique_trade_date[i - rebalance_window - validation_window]) & (df.datadate>=(unique_trade_date[i - rebalance_window - validation_window - 63]))]
@@ -382,7 +382,7 @@ def run_Lstm_strategy(df, unique_trade_date, rebalance_window, validation_window
 
     print("==============Get Backtest Results===========")
     df_account_value = pd.read_csv('wait_for_process/result.csv')
-    now = datetime.datetime.now().strftime('%Y%m%d-%Hh%M')
+    now = datetime.now().strftime('%Y%m%d-%Hh%M')
     perf_stats_all = backtest_stats(account_value=df_account_value)
     perf_stats_all = pd.DataFrame(perf_stats_all)
     perf_stats_all.to_csv("backtesting/" + "perf_stats_all_" + now + '.csv')

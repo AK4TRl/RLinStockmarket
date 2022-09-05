@@ -195,6 +195,8 @@ def calcualte_turbulence(df):
                 turbulence_temp = 0
         else:
             turbulence_temp = 0
+        if turbulence_temp > 1000:
+            turbulence_temp %= 1000
         turbulence_index.append(turbulence_temp)
 
     turbulence_index = pd.DataFrame({'date': df_price_pivot.index,
@@ -202,10 +204,10 @@ def calcualte_turbulence(df):
     return turbulence_index
 
 
-if __name__ == '__main__':
-    preprocessed_path = "../data/test_done_data.csv"
-    data = preprocess_data()
-    data.fillna(method='bfill', inplace=True)
-    data = add_turbulence(data)
-    data.to_csv(preprocessed_path)
+# if __name__ == '__main__':
+#     preprocessed_path = "../data/NASDAQ_data.csv"
+#     data = preprocess_data()
+#     data.fillna(method='bfill', inplace=True)
+#     data = add_turbulence(data)
+#     data.to_csv(preprocessed_path)
 

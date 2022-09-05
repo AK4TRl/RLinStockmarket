@@ -5,12 +5,12 @@ import time
 import gym
 
 # RL models from stable-baselines
-from stable_baselines import GAIL, SAC
-from stable_baselines import ACER
+# from stable_baselines import GAIL, SAC
+# from stable_baselines import ACER
 from stable_baselines3 import PPO
 from stable_baselines3 import A2C
 from stable_baselines3 import DDPG
-from stable_baselines import TD3
+# from stable_baselines import TD3
 
 from stable_baselines3.common.noise import OrnsteinUhlenbeckActionNoise
 from stable_baselines3.common.vec_env import DummyVecEnv
@@ -38,15 +38,15 @@ def train_A2C(env_train, model_name, timesteps=25000):
     print('Training time (A2C): ', (end - start) / 60, ' minutes')
     return model
 
-def train_ACER(env_train, model_name, timesteps=25000):
-    start = time.time()
-    model = ACER('MlpPolicy', env_train, verbose=0, tensorboard_log="./data/log2/")
-    model.learn(total_timesteps=timesteps)
-    end = time.time()
-
-    model.save(f"{config.TRAINED_MODEL_DIR}/{model_name}")
-    print('Training time (A2C): ', (end - start) / 60, ' minutes')
-    return model
+# def train_ACER(env_train, model_name, timesteps=25000):
+#     start = time.time()
+#     model = ACER('MlpPolicy', env_train, verbose=0, tensorboard_log="./data/log2/")
+#     model.learn(total_timesteps=timesteps)
+#     end = time.time()
+#
+#     model.save(f"{config.TRAINED_MODEL_DIR}/{model_name}")
+#     print('Training time (A2C): ', (end - start) / 60, ' minutes')
+#     return model
 
 
 def train_DDPG(env_train, model_name, timesteps=10000):
@@ -190,7 +190,7 @@ def run_ensemble_strategy(df, unique_trade_date, rebalance_window, validation_wi
         # Tuning trubulence index based on historical data
         # Turbulence lookback window is one quarter
         end_date_index = df.index[df["datadate"] == unique_trade_date[i - rebalance_window - validation_window]].to_list()[-1]
-        start_date_index = end_date_index - validation_window*30 + 1
+        start_date_index = end_date_index - validation_window*81 + 1
 
         historical_turbulence = df.iloc[start_date_index:(end_date_index + 1), :]
         #historical_turbulence = df[(df.datadate<unique_trade_date[i - rebalance_window - validation_window]) & (df.datadate>=(unique_trade_date[i - rebalance_window - validation_window - 63]))]
