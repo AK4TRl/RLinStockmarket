@@ -79,7 +79,7 @@ class Actor(nn.Module):
         rho = torch.clamp(sample_rho, 0.0, 1.0)
         rho_log_p = m.log_prob(sample_rho)
 
-        return a * mu  # 2 * 1
+        return a * mu * (1 + rho)  # 2 * 1
 
 
 class Critic(nn.Module):
