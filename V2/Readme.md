@@ -107,5 +107,8 @@ See [backtesting script](preprocessing/backtesting.py) for use
 The stock data we use is NASDAQ 100 from 2010.12 - 2021.7
 <img src=figs/data.png width="500">
 
+The stock data we use is dow 30 from 2009.01 - 2020.7
+<img src=figs/data2.png width="500">
+
 ### One Agent for Strategy
 Our purpose is to develop a highly robust Agent for trading strategy given.
