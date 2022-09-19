@@ -139,12 +139,12 @@ class Lstm_AC(object):
         # actor net
         self.actor = Actor(state_dim, action_dim, max_action).to(device)
         self.actor_target = copy.deepcopy(self.actor)
-        self.actor_optimizer = torch.optim.Adam(self.actor.parameters(), lr=3e-7, weight_decay=1e-8)
+        self.actor_optimizer = torch.optim.Adam(self.actor.parameters(), lr=3e-6, weight_decay=1e-7)
 
         # critic net
         self.critic = Critic(state_dim, 256, action_dim).to(device)
         self.critic_target = copy.deepcopy(self.critic)
-        self.critic_optimizer = torch.optim.Adam(self.critic.parameters(), lr=3e-7, weight_decay=1e-8)
+        self.critic_optimizer = torch.optim.Adam(self.critic.parameters(), lr=3e-6, weight_decay=1e-7)
 
         #
         self.max_action = max_action
