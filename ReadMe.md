@@ -1,4 +1,4 @@
-## TD3-LIKE Strategy FOR StocketMarket
+## SAC-LIKE Strategy FOR StocketMarket
 
 Our goal is to apply RL to quantitative trading, enabling intelligent agents to complete trades in that complex environment.
 
