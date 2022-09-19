@@ -71,52 +71,52 @@ class StockEnvValidation(gym.Env):
 
     def _sell_stock(self, index, action):
         # perform sell action based on the sign of the action
-        if self.turbulence < self.turbulence_threshold:
-            if self.state[index + STOCK_DIM + 1] > 0:
-                # update balance
-                self.state[0] += \
-                    self.state[index + 1] * min(abs(action), self.state[index + STOCK_DIM + 1]) * \
-                    (1 - TRANSACTION_FEE_PERCENT)
-                # update shares num
-                self.state[index + STOCK_DIM + 1] -= min(abs(action), self.state[index + STOCK_DIM + 1])
-                # count the cost according to the close price and the num
-                # state[1 : 30] 为调整后闭盘价
-                self.cost += self.state[index + 1] * min(abs(action), self.state[index + STOCK_DIM + 1]) * \
-                             TRANSACTION_FEE_PERCENT
-                self.trades += 1
-            else:
-                pass
-        else:
-            # if turbulence goes over threshold, just clear out all positions
-            if self.state[index + STOCK_DIM + 1] > 0:
-                # update balance
-                self.state[0] += self.state[index + 1] * self.state[index + STOCK_DIM + 1] * \
-                                 (1 - TRANSACTION_FEE_PERCENT)
-                self.state[index + STOCK_DIM + 1] = 0
-                self.cost += self.state[index + 1] * self.state[index + STOCK_DIM + 1] * \
-                             TRANSACTION_FEE_PERCENT
-                self.trades += 1
-            else:
-                pass
-
-    def _buy_stock(self, index, action):
-        # perform buy action based on the sign of the action
-        if self.turbulence < self.turbulence_threshold:
-            available_amount = self.state[0] // self.state[index + 1]
-            # print('available_amount:{}'.format(available_amount))
-
+        # if self.turbulence < self.turbulence_threshold:
+        if self.state[index + STOCK_DIM + 1] > 0:
             # update balance
-            self.state[0] -= self.state[index + 1] * min(available_amount, action) * \
-                             (1 + TRANSACTION_FEE_PERCENT)
-
-            self.state[index + STOCK_DIM + 1] += min(available_amount, action)
-
-            self.cost += self.state[index + 1] * min(available_amount, action) * \
+            self.state[0] += \
+                self.state[index + 1] * min(abs(action), self.state[index + STOCK_DIM + 1]) * \
+                (1 - TRANSACTION_FEE_PERCENT)
+            # update shares num
+            self.state[index + STOCK_DIM + 1] -= min(abs(action), self.state[index + STOCK_DIM + 1])
+            # count the cost according to the close price and the num
+            # state[1 : 30] 为调整后闭盘价
+            self.cost += self.state[index + 1] * min(abs(action), self.state[index + STOCK_DIM + 1]) * \
                          TRANSACTION_FEE_PERCENT
             self.trades += 1
         else:
-            # if turbulence goes over threshold, just stop buying
             pass
+        # else:
+        #     # if turbulence goes over threshold, just clear out all positions
+        #     if self.state[index + STOCK_DIM + 1] > 0:
+        #         # update balance
+        #         self.state[0] += self.state[index + 1] * self.state[index + STOCK_DIM + 1] * \
+        #                          (1 - TRANSACTION_FEE_PERCENT)
+        #         self.state[index + STOCK_DIM + 1] = 0
+        #         self.cost += self.state[index + 1] * self.state[index + STOCK_DIM + 1] * \
+        #                      TRANSACTION_FEE_PERCENT
+        #         self.trades += 1
+        #     else:
+        #         pass
+
+    def _buy_stock(self, index, action):
+        # perform buy action based on the sign of the action
+        # if self.turbulence < self.turbulence_threshold:
+        available_amount = self.state[0] // self.state[index + 1]
+        # print('available_amount:{}'.format(available_amount))
+
+        # update balance
+        self.state[0] -= self.state[index + 1] * min(available_amount, action) * \
+                         (1 + TRANSACTION_FEE_PERCENT)
+
+        self.state[index + STOCK_DIM + 1] += min(available_amount, action)
+
+        self.cost += self.state[index + 1] * min(available_amount, action) * \
+                     TRANSACTION_FEE_PERCENT
+        self.trades += 1
+        # else:
+        #     # if turbulence goes over threshold, just stop buying
+        #     pass
 
     def step(self, actions):
         # print(self.day)
@@ -161,8 +161,8 @@ class StockEnvValidation(gym.Env):
             # actions = (actions.astype(int))
             # 如果波动超过波动阈值
             # 将动作值全部变负
-            if self.turbulence >= self.turbulence_threshold:
-                actions = np.array([-HMAX_NORMALIZE] * STOCK_DIM)
+            # if self.turbulence >= self.turbulence_threshold:
+            #     actions = np.array([-HMAX_NORMALIZE] * STOCK_DIM)
             begin_total_asset = self.state[0] + \
                                 sum(np.array(self.state[1:(STOCK_DIM + 1)]) * np.array(
                                     self.state[(STOCK_DIM + 1):(STOCK_DIM * 2 + 1)]))
