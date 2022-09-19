@@ -103,23 +103,23 @@ class Critic(nn.Module):
         self.lstm2.flatten_parameters()
 
         sa = torch.cat([state, action.squeeze(0)], 1).unsqueeze(0)
-        q1 = torch.tanh(self.l1(sa))
-        q1 = torch.tanh(self.l2(q1))
+        q1 = F.relu(self.l1(sa))
+        q1 = F.relu(self.l2(q1))
         q1, hidden = self.lstm1(q1, hidden)
-        q1 = torch.tanh(self.l3(q1))
+        q1 = self.l3(q1)
 
-        q2 = torch.tanh(self.l4(sa))
-        q2 = torch.tanh(self.l5(q2))
+        q2 = F.relu(self.l4(sa))
+        q2 = F.relu(self.l5(q2))
         q2, hidden = self.lstm2(q2, hidden)
-        q2 = torch.tanh(self.l6(q2))
+        q2 = self.l6(q2)
         return q1, q2
 
     def Q1(self, state, hidden, action):
         sa = torch.cat([state, action.squeeze(0)], 1).unsqueeze(0)
-        q1 = torch.tanh(self.l1(sa))
-        q1 = torch.tanh(self.l2(q1))
+        q1 = F.relu(self.l1(sa))
+        q1 = F.relu(self.l2(q1))
         q1, hidden = self.lstm1(q1, hidden)
-        q1 = torch.tanh(self.l3(q1))
+        q1 = self.l3(q1)
         return q1, hidden
 
 
