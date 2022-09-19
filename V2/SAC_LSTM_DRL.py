@@ -5,7 +5,7 @@ import datetime
 import glob
 
 # RL models
-from model import TD3_LSTM
+from model import SAC_LSTM
 from model import utils
 from stable_baselines3.common.vec_env import DummyVecEnv
 # from preprocessing.preprocessors import *
@@ -34,7 +34,7 @@ action_dim = 30
 time_span = 126
 
 # init model
-test_model = TD3_LSTM.Lstm_AC(state_dim, action_dim, 1)
+SAC_LSTM_model = SAC_LSTM.Lstm_AC(state_dim, action_dim, 1)
 df_account_value = []
 
 
@@ -82,7 +82,7 @@ def train_Lstm_model(env_train, train_data, timesteps):
                     np.array([item.drop(labels='tic', axis=1).values for item in selected_data]))
                 action = env_train.action_space.sample().reshape(1, action_dim)
             else:
-                action = (test_model.select_action(state, processed_data) + np.random.normal(0, 0.1,size=action_dim)).clip(-1,1)
+                action = (SAC_LSTM_model.select_action(state, processed_data) + np.random.normal(0, 0.1,size=action_dim)).clip(-1,1)
 
             # Perform action
             next_state, reward, done, _ = env_train.step(action)
@@ -101,7 +101,7 @@ def train_Lstm_model(env_train, train_data, timesteps):
 
             # Train agent after collecting sufficient data
             if episode_timesteps >= 126:
-                loss = test_model.train(replay_buffer, 64, (c_hx, c_cx), t, logger, processed_data)
+                loss = SAC_LSTM_model.train(replay_buffer, 64, (c_hx, c_cx), t, logger, processed_data)
                 # print(f"Loss L: {loss}")
 
             if done:
@@ -118,7 +118,7 @@ def train_Lstm_model(env_train, train_data, timesteps):
     end = time.time()
     # model.save(f"{config.TRAINED_MODEL_DIR}/{model_name}")
     print('Training time (TD3): ', (end - start) / 60, ' minutes')
-    return test_model
+    return SAC_LSTM_model
 
 
 # 模型预测入口
@@ -319,7 +319,7 @@ def run_Lstm_strategy(df, unique_trade_date, rebalance_window, validation_window
         print("====== POMDP Model Training======")
         print("======Model training from: ", 20090102, "to ",
               unique_trade_date[i - rebalance_window - validation_window])
-        model_td3 = train_Lstm_model(env_train, train, timesteps=5)
+        model_sac = train_Lstm_model(env_train, train, timesteps=5)
 
         print("====== POMDP Model validation======")
         print("======DDPG Validation from: ", unique_trade_date[i - rebalance_window - validation_window], "to ",
@@ -329,7 +329,7 @@ def run_Lstm_strategy(df, unique_trade_date, rebalance_window, validation_window
         hist_data_vali = get_hist_data(
             raw_data=df, unique_trade_date=unique_trade_date, date_back=i - rebalance_window - validation_window,
             iteration=i)
-        DRL_validation(model=model_td3, test_data=validation, test_env=env_val, test_obs=obs_val,
+        DRL_validation(model=model_sac, test_data=validation, test_env=env_val, test_obs=obs_val,
                        hist_data=hist_data_vali)
 
         sharpe_student = get_validation_sharpe(i)
@@ -338,7 +338,7 @@ def run_Lstm_strategy(df, unique_trade_date, rebalance_window, validation_window
 
         ############## Trading starts ##############
         print("======Trading from: ", unique_trade_date[i - rebalance_window], "to ", unique_trade_date[i])
-        print("Used Model: ", model_td3)
+        print("Used Model: ", model_sac)
         # TODO:get hist trade data
         hist_data_trade = get_hist_data(raw_data=df, unique_trade_date=unique_trade_date,
                                         date_back=i - rebalance_window, iteration=i)

@@ -8,7 +8,7 @@ from preprocessing.implementTool import *
 # 第一个是多模型训练策略（标程）
 # 第二个是单模型训练策略
 # from model.models import *
-from TD3_LSTM_DRL import *
+from SAC_LSTM_DRL import *
 import os
 
 
